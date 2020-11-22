@@ -1,8 +1,9 @@
 import argparse
 import fitz
 
-from PyQt5.QtWidgets import QApplication
+from PyQt5 import uic
 from PyQt5.QtSvg import QSvgWidget
+from PyQt5.QtWidgets import QApplication
 
 test_pdf_input = "../resources/inkscape.pdf"
 test_svg_output = "test.svg"
@@ -27,13 +28,20 @@ def convert_pdf_to_svg(pdffile, filename):
         return None
 
 def run_qt_application(svg_string):
+    Form, Window = uic.loadUiType("./gui/main_window.ui")
+
     app = QApplication([])
-    
+
+    window = Window()
+    form = Form()
+    form.setupUi(window)
+    window.show()
+
     svg_widget = QSvgWidget()
     svg_widget.renderer().load(bytearray(svg_string, encoding="utf-8"))
-    svg_widget.setGeometry(100, 100, 500, 500)
-    svg_widget.show()
-    
+
+    window.setCentralWidget(svg_widget)
+
     app.exec_()
 
 if __name__ == "__main__":
@@ -42,5 +50,4 @@ if __name__ == "__main__":
     svg_string = convert_pdf_to_svg(test_pdf_input, test_svg_output)
     
     if svg_string != None:
-        # print(svg_string)
         run_qt_application(svg_string)
