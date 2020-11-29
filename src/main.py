@@ -3,6 +3,9 @@ import fitz
 import os
 
 from PyQt5 import uic
+from PyQt5.QtCore import QCoreApplication
+from PyQt5.QtCore import QLocale
+from PyQt5.QtCore import QTranslator
 from PyQt5.QtSvg import QSvgWidget
 from PyQt5.QtWidgets import QApplication, QFileDialog
 
@@ -19,6 +22,8 @@ def run_qt_application():
     Form, Window = uic.loadUiType("./gui/main_window.ui")
 
     app = QApplication([])
+    load_translator("en_US.qm", app)
+
     window = Window()
     form = Form()
     form.setupUi(window)
@@ -31,6 +36,13 @@ def run_qt_application():
     window.show()
     app.exec_()
 
+def load_translator(filename, app):
+    translator = QTranslator()
+    search_directory = "i18n"
+
+    if translator.load(filename, search_directory):
+        app.installTranslator(translator)
+
 def configure_qt_signals_and_slots(form, window):
     form.action_open.triggered.connect(lambda: open_file_dialog(window, form))
     tabs = form.tab_open_documents
@@ -38,7 +50,10 @@ def configure_qt_signals_and_slots(form, window):
 
 def open_file_dialog(parent, form):
     # TODO: Use "tr()" to translate strings
-    (filename, selected_filter) = QFileDialog.getOpenFileName(parent, "Open PDF File", "~", "PDF Files (*.pdf)")
+    (filename, selected_filter) = QFileDialog.getOpenFileName(parent,
+                                                              QCoreApplication.translate("open_file_dialog", "Open PDF File"),
+                                                              "",
+                                                              "PDF (*.pdf)")
 
     if filename:
         svg_string = convert_pdf_to_svg(filename)
@@ -49,7 +64,6 @@ def open_file_dialog(parent, form):
             svg_widget = QSvgWidget()
             svg_widget.renderer().load(bytearray(svg_string, encoding="utf-8"))
 
-            # TODO: Show only basename(filename) and not complete path.
             file_basename = os.path.basename(filename)
             form.tab_open_documents.addTab(svg_widget, file_basename)
 
