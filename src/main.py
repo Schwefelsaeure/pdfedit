@@ -1,5 +1,6 @@
 import argparse
 import fitz
+import os
 
 from PyQt5 import uic
 from PyQt5.QtSvg import QSvgWidget
@@ -21,20 +22,21 @@ def run_qt_application():
     window = Window()
     form = Form()
     form.setupUi(window)
-    svg_widget = QSvgWidget()
 
     # Configure GUI elements
-    window.setCentralWidget(svg_widget)
-    configure_qt_signals_and_slots(form, window, svg_widget)
+    # window.setCentralWidget(svg_widget)
+    configure_qt_signals_and_slots(form, window)
 
     # Show the GUI
     window.show()
     app.exec_()
 
-def configure_qt_signals_and_slots(form, window, svg_widget):
-    form.action_open.triggered.connect(lambda: open_file_dialog(window, svg_widget))
+def configure_qt_signals_and_slots(form, window):
+    form.action_open.triggered.connect(lambda: open_file_dialog(window, form))
+    tabs = form.tab_open_documents
+    tabs.tabCloseRequested.connect(lambda index: tabs.removeTab(index))
 
-def open_file_dialog(parent, svg_widget):
+def open_file_dialog(parent, form):
     # TODO: Use "tr()" to translate strings
     (filename, selected_filter) = QFileDialog.getOpenFileName(parent, "Open PDF File", "~", "PDF Files (*.pdf)")
 
@@ -42,7 +44,21 @@ def open_file_dialog(parent, svg_widget):
         svg_string = convert_pdf_to_svg(filename)
 
         if svg_string != None:
+            delete_welcome_tab_if_present(form)
+
+            svg_widget = QSvgWidget()
             svg_widget.renderer().load(bytearray(svg_string, encoding="utf-8"))
+
+            # TODO: Show only basename(filename) and not complete path.
+            file_basename = os.path.basename(filename)
+            form.tab_open_documents.addTab(svg_widget, file_basename)
+
+def delete_welcome_tab_if_present(form):
+    tab_widget = form.tab_open_documents
+    tab_index = tab_widget.indexOf(form.welcome_tab)
+
+    if tab_index >= 0:
+        tab_widget.removeTab(tab_index)
 
 def convert_pdf_to_svg(filename):
     doc = fitz.open(filename)

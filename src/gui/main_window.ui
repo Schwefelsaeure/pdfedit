@@ -14,7 +14,80 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="central_widget">
-   <layout class="QVBoxLayout" name="verticalLayout"/>
+   <layout class="QVBoxLayout" name="verticalLayout">
+    <item>
+     <widget class="QSplitter" name="central_splitter">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <widget class="QToolBox" name="tool_box_pages_bookmarks_search">
+       <property name="currentIndex">
+        <number>1</number>
+       </property>
+       <widget class="QWidget" name="page_pdf_pages">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>192</width>
+          <height>457</height>
+         </rect>
+        </property>
+        <attribute name="label">
+         <string>Pages</string>
+        </attribute>
+       </widget>
+       <widget class="QWidget" name="page_pdf_bookmarks">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>192</width>
+          <height>457</height>
+         </rect>
+        </property>
+        <attribute name="label">
+         <string>Bookmarks</string>
+        </attribute>
+       </widget>
+      </widget>
+      <widget class="QTabWidget" name="tab_open_documents">
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <property name="tabsClosable">
+        <bool>true</bool>
+       </property>
+       <property name="movable">
+        <bool>true</bool>
+       </property>
+       <widget class="QWidget" name="welcome_tab">
+        <attribute name="title">
+         <string>Welcome</string>
+        </attribute>
+       </widget>
+      </widget>
+      <widget class="QToolBox" name="tool_box_properties_selected_pdf_object">
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="page_properties">
+        <property name="geometry">
+         <rect>
+          <x>0</x>
+          <y>0</y>
+          <width>192</width>
+          <height>489</height>
+         </rect>
+        </property>
+        <attribute name="label">
+         <string>Properties</string>
+        </attribute>
+       </widget>
+      </widget>
+     </widget>
+    </item>
+   </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
