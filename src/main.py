@@ -2,12 +2,12 @@ import argparse
 import fitz
 import os
 
-from PyQt5 import uic
-from PyQt5.QtCore import QCoreApplication
-from PyQt5.QtCore import QLocale
-from PyQt5.QtCore import QTranslator
-from PyQt5.QtSvg import QSvgWidget
-from PyQt5.QtWidgets import QApplication, QFileDialog
+from PyQt6 import uic
+from PyQt6.QtCore import QCoreApplication
+from PyQt6.QtCore import QLocale
+from PyQt6.QtCore import QTranslator
+from PyQt6.QtSvgWidgets import QSvgWidget
+from PyQt6.QtWidgets import QApplication, QFileDialog
 
 def parse_command_line_arguments():
     parser = argparse.ArgumentParser(description="pdfedit - a free an open source PDF editor")
@@ -34,7 +34,7 @@ def run_qt_application():
 
     # Show the GUI
     window.show()
-    app.exec_()
+    app.exec()
 
 def load_translator(filename, app):
     translator = QTranslator()
