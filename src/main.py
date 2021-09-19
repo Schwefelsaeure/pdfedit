@@ -7,7 +7,7 @@ from PyQt6.QtCore import QCoreApplication
 from PyQt6.QtCore import QLocale
 from PyQt6.QtCore import QTranslator
 from PyQt6.QtSvgWidgets import QSvgWidget
-from PyQt6.QtWidgets import QApplication, QFileDialog
+from PyQt6.QtWidgets import QApplication, QFileDialog, QGridLayout
 
 def parse_command_line_arguments():
     parser = argparse.ArgumentParser(description="pdfedit - a free an open source PDF editor")
@@ -67,12 +67,36 @@ def open_file_dialog(parent, form):
             file_basename = os.path.basename(filename)
             form.tab_open_documents.addTab(svg_widget, file_basename)
 
+            # TODO: Define a reasonable thumbnail size of m x n pixels and set size here.
+            grid = QGridLayout()
+            form.page_pdf_pages.setLayout(grid)
+            svg_thumbnails = create_page_thumbnails(filename)
+
+            for svg_thumbnail in svg_thumbnails:
+                svg_widget = QSvgWidget()
+                svg_widget.renderer().load(bytearray(svg_thumbnail, encoding="utf-8"))
+                svg_widget.resize(20, 30)
+                grid.addWidget(svg_widget)
+
 def delete_welcome_tab_if_present(form):
     tab_widget = form.tab_open_documents
     tab_index = tab_widget.indexOf(form.welcome_tab)
 
     if tab_index >= 0:
         tab_widget.removeTab(tab_index)
+
+def create_page_thumbnails(filename):
+    pages_as_svg = []
+
+    doc = fitz.open(filename)
+
+    for page_number in range(0, doc.pageCount):
+        print("Creating thumbnail page {}".format(page_number + 1))
+        page = doc.loadPage(page_number);
+        svg_string = page.getSVGimage()
+        pages_as_svg.append(svg_string)
+
+    return pages_as_svg
 
 def convert_pdf_to_svg(filename):
     doc = fitz.open(filename)
