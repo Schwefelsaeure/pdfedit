@@ -1,2 +1,2 @@
-PyMuPDF>=1.17.0 
-PyQt5>=5.14.2
+PyMuPDF>=1.18.19
+PyQt6>=6.1.1

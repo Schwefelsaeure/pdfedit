@@ -11,11 +11,11 @@ Design principles:
 
 ### Install dependencies
 
-For Ubuntu:
+For Arch Linux:
 
 ```
-sudo apt install qt5-default qttools5-dev-tools qtcreator python3-pyqt5
-pip3 install -r requirements.txt
+sudo pacman -S install qt6-base qt6-tools qtcreator python-pyqt6
+pip install -r requirements.txt
 ```
 
 **Note:** This also installs two useful Qt programs: [Qt Designer](https://doc.qt.io/qt-5/qtdesigner-manual.html) and [Qt Creator](https://doc.qt.io/qtcreator/index.html). Both applications offer a WYSIWYG editor to easily create GUIs.
